@@ -1,26 +1,16 @@
-from .models import Employee
+from .models import Employee 
+from django.contrib.auth.models import User
+
 from rest_framework import serializers
 
 
-class  EmployeeSerializers(serializers.Serializer):
-    name = serializers.CharField(max_length=50)
-    email = serializers.EmailField(max_length=254)
-    password = serializers.CharField(max_length=50)
-    phone = serializers.CharField(max_length=50)
+class  EmployeeSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields= '__all__'
+
     
-    def create(selt,validated_data):
-        print('create method fatima ')
-        return Employee.objects.create(**validated_data)
-    
-    def update(self, employee, validated_data):
-        newemployee = Employee(**validated_data)
-        newemployee.id = employee.id
-        newemployee.save()
-        return newemployee
-    
-class  UserSerializers(serializers.Serializer):
-    username = serializers.CharField(max_length=50)
-    first_name = serializers.CharField(max_length=50)
-    last_name = serializers.CharField(max_length=50)
-    email = serializers.EmailField(max_length=254)
-    password = serializers.CharField(max_length=50)
+class  UserSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
