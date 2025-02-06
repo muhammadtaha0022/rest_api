@@ -6,25 +6,26 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-@csrf_exempt
+@api_view(['GET','POST'])
 def employeeListView(request):
     if request.method == 'GET':
         employee = Employee.objects.all()
         serializer = EmployeeSerializers(employee,many = True)
-        return JsonResponse(serializer.data,safe=False)
+        return Response(serializer.data)
     elif request.method =='POST': 
-        jsondata = JSONParser().parse(request)
-        serializer = EmployeeSerializers(data =jsondata)
+        serializer = EmployeeSerializers(data =request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, sefe= False)
+            return Response(serializer.data)
         else:
-            return JsonResponse(serializer.errors,safe= False)
+            return Response(serializer.errors)
             
-        # return JsonResponse(serializer.data,safe=False)  
+        # return Response(serializer.data,safe=False)  
         
-@csrf_exempt
+@api_view(['DELETE', 'GET', 'PUT'])
 def EmployeeDetailView(request , pk):
     try:
         employee = Employee.objects.get(pk=pk)
@@ -38,19 +39,19 @@ def EmployeeDetailView(request , pk):
         return HttpResponse(status = status.HTTP_204_NO_CONTENT )
     elif request.method == 'GET':
         serializer = EmployeeSerializers(employee)
-        return JsonResponse(serializer.data , safe =False)
+        return Response(serializer.data)
         
     elif request.method == 'PUT':
-        jsondata = JSONParser().parse(request)
-        serializer = EmployeeSerializers(employee, data =jsondata)
+        serializer = EmployeeSerializers(employee, data =Response.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, sefe= False)
+            return Response(serializer.data, sefe= False)
         else:
-            return JsonResponse(serializer.errors,safe= False)    
+            return Response(serializer.errors)    
 
-        
+@api_view(['GET'])  
 def userListView(request):
-        users = User.objects.all()
-        serializer = UserSerializers(users,many= True)
-        return JsonResponse(serializer.data,safe= False)
+        if request.method == 'GET':
+            users = User.objects.all()
+            serializer = UserSerializers(users,many= True)
+            return Response(serializer.data)
