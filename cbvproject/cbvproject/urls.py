@@ -16,9 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from cbvapp.views import CourseListView, CourseDetailView
+from rest_framework.routers import DefaultRouter
+from cbvapp.views import CourseViewSet
+router = DefaultRouter()
+router.register('courses',CourseViewSet, basename='course')
+# from cbvapp.views import CourseListView, CourseDetailView
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('cbvapp.urls')),
+    path('api/', include(router.urls)),
 
 ]
