@@ -6,23 +6,35 @@ from rest_framework import status
 from django.http import Http404
 # Create your views here.
 from rest_framework import mixins,generics
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ViewSet ,ModelViewSet
+
+class CourseViewSet(ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializar
 
 
 
-class CourseViewSet(ViewSet):
-    def list(self , request):
-        courses = Course.objects.all()
-        serializer = CourseSerializar(courses, many = True)
-        return Response(serializer.data)
+
+
+
+
+
+
+
+
+# class CourseViewSet(ViewSet):
+#     def list(self , request):
+#         courses = Course.objects.all()
+#         serializer = CourseSerializar(courses, many = True)
+#         return Response(serializer.data)
     
-    def retrive(self,request,pk):
-        try:
-            course = Course.objects.get(pk=pk)
-        except Course.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = CourseSerializar(course)
-        return Response(serializer.data)
+#     def retrive(self,request,pk):
+#         try:
+#             course = Course.objects.get(pk=pk)
+#         except Course.DoesNotExist:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
+#         serializer = CourseSerializar(course)
+#         return Response(serializer.data)
 
 
 
